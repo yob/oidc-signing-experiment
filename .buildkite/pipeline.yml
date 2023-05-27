@@ -1,0 +1,4 @@
+steps:
+  - command: ".buildkite/steps/change-commit-push"
+    label: ":git:"
+

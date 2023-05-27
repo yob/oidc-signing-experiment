@@ -1,0 +1,24 @@
+#!/bin/sh 
+
+set -e
+
+echo "+++ fetching OIDC token from Buildkite"
+
+unset GITSIGN_CREDENTIAL_CACHE
+SIGSTORE_ID_TOKEN="$(buildkite-agent oidc request-token --audience sigstore)"
+
+echo "+++ creating signed git commit"
+
+git config --local commit.gpgsign true  # Sign all commits
+git config --local tag.gpgsign true  # Sign all tags
+git config --local gpg.x509.program gitsign  # Use gitsign for signing
+git config --local gpg.format x509  # gitsign expects x509 args
+
+BRANCH_NAME="branch-`date +%s`"
+git checkout -b ${BRANCH_NAME}
+echo `date --iso-8601=seconds` > the-date.txt
+git add the-date.txt
+SIGSTORE_ID_TOKEN="$(buildkite-agent oidc request-token --audience sigstore)" git commit the-date.txt -m "update"
+
+echo "+++ pushing branch to github"
+git push origin -u ${BRANCH_NAME}
