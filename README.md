@@ -134,3 +134,53 @@ With no signature the output looks like:
 $ gitsign verify --certificate-identity=https://buildkite.com/yob-opensource/oidc-signing-experiment --certificate-oidc-issuer=https://agent.buildkite.com HEAD
 Error: unsupported signature type
 ```
+
+## What could you use this for?
+
+* Buildkite agent hooks that restrict an agent to only run commits signed by known users or automation
+* Forensics to ensure commits that look like they were genertaed by automation actually were
+
+## Privacy Considerations
+
+Note the following text from the [gitsign
+README](https://github.com/sigstore/gitsign). Some details that you may
+consider private (like Buildkite pipeline URLs, or branch names) may be written
+to a public transparency log.
+
+> 1. Within the Git commit
+>
+>   The commit itself contains a signed digest of the user commit content (e.g.
+>   author, committer, message, parents, etc.) along with the code signing
+>   certificate. This data is stored within the commit itself as part of your
+>   repository. See
+>   [Inspecting the Git commit signature](#inspecting-the-git-commit-signature)
+>   for more details.
+>
+> 2. Within the Rekor transparency log
+>
+>   To be able to verify signatures for ephemeral certs past their `Not After`
+>   time, Gitsign records commits and the code signing certificates to
+>   [Rekor](https://docs.sigstore.dev/rekor/overview/).
+>
+>   - If `rekorMode = online` (default)
+>
+>   This data is a
+>   [HashedRekord](https://github.com/sigstore/rekor/blob/e375eb461cae524270889b57a249ff086bea6c05/types.md#hashed-rekord)
+>   containing a SHA256 hash of the commit SHA, as well as the code signing
+>   certificate. See
+>   [Verifying the Transparency Log](#verifying-the-transparency-log) for more
+>   details.
+>
+>   - If `rekorMode = offline`
+>
+>   Note: offline verification is new, and should be considered experimental for now.
+>
+>   By default, data is written to the
+>   [public Rekor instance](https://docs.sigstore.dev/rekor/public-instance). In
+>   particular, users and organizations may be sensitive to the data contained
+>   within code signing certificates returned by Fulcio, which may include user
+>   emails or repo identifiers. See
+>   [OIDC usage in Fulcio](https://github.com/sigstore/fulcio/blob/6ac6b8c94c3ec6106d68c0f92225016a3a6eef79/docs/oidc.md)
+>   for more details for what data is contained in the code signing certs, and
+>   [Deploy a Rekor Server Manually](https://docs.sigstore.dev/rekor/installation/#deploy-a-rekor-server-manually)
+>   for how to run your own Rekor instance.
