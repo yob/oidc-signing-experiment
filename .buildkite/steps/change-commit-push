@@ -8,6 +8,9 @@ echo "+++ fetching OIDC token from Buildkite"
 unset GITSIGN_CREDENTIAL_CACHE
 
 # Now fetch an OIDC token from Buildkite. Audience must be "sigstore", as required by fulcio
+# SIGSTORE_ID_TOKEN is a special ENV that gitsign looks for. It will use the OIDC token it finds
+# there to request a short term x.509 certificate from sigstore/fulcio, and git will sign the
+# commit with it
 SIGSTORE_ID_TOKEN="$(buildkite-agent oidc request-token --audience sigstore)"
 
 echo "+++ creating signed git commit"
