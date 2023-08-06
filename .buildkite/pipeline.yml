@@ -1,4 +1,6 @@
 steps:
   - command: ".buildkite/steps/change-commit-push"
     label: ":git:"
+    env:
+      GITSIGN_FULCIO_URL: "http://127.0.0.1:5555"
 
