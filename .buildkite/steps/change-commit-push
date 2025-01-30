@@ -13,6 +13,10 @@ unset GITSIGN_CREDENTIAL_CACHE
 # commit with it
 SIGSTORE_ID_TOKEN="$(buildkite-agent oidc request-token --audience sigstore)"
 
+echo "+++ sitsign version and config"
+
+gitsign --version
+
 echo "+++ creating signed git commit"
 
 # setup the working directory git checkout to sign commits
