@@ -2,6 +2,6 @@ steps:
   - command: ".buildkite/steps/change-commit-push"
     label: ":git:"
     env:
-      GITSIGN_FULCIO_URL: "https://fulcio.sigstage.dev"
+      #GITSIGN_FULCIO_URL: "https://fulcio.sigstage.dev"
       GITSIGN_LOG: gitsign.log
     artifact_paths: "*.log"
