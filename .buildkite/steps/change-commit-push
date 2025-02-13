@@ -13,6 +13,8 @@ unset GITSIGN_CREDENTIAL_CACHE
 # commit with it
 SIGSTORE_ID_TOKEN="$(buildkite-agent oidc request-token --audience sigstore)"
 
+echo "token size: $(echo "${SIGSTORE_ID_TOKEN} | wc -c")"
+
 echo "+++ sitsign version and config"
 
 gitsign --version
