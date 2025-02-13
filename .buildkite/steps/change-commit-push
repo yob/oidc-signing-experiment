@@ -12,8 +12,7 @@ unset GITSIGN_CREDENTIAL_CACHE
 # there to request a short term x.509 certificate from sigstore/fulcio, and git will sign the
 # commit with it
 SIGSTORE_ID_TOKEN="$(buildkite-agent oidc request-token --audience sigstore)"
-
-echo "token size: $(echo "${SIGSTORE_ID_TOKEN} | wc -c")"
+export SIGSTORE_ID_TOKEN
 
 echo "+++ sitsign version and config"
 
